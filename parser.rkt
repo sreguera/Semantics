@@ -4,10 +4,12 @@
 (require (prefix-in : parser-tools/lex-sre))
 (require parser-tools/yacc)
 
+(provide parse-string (protect-out mtpc-parser mtpc-lexer))
+
 (define-tokens data-tokens (NUM ID))
 (define-empty-tokens punct-tokens (EOF IF THEN ELSE FI LPAREN RPAREN PLUS ASSIGN EQ NOT IMP))
 
-(define the-lexer
+(define mtpc-lexer
   (lexer
    [(eof) (token-EOF)]
    ["(" (token-LPAREN)]
@@ -25,21 +27,9 @@
    [(:: alphabetic
         (:* (:or alphabetic numeric #\_)))
     (token-ID (string->symbol lexeme))]
-   [whitespace (the-lexer input-port)]))
+   [whitespace (mtpc-lexer input-port)]))
 
-(define test-input "( ) 123 A_1 abc1 ¬ ⊃ λ if then else fi + := =")
-
-(define (get-tokens a-lexer)
-  (define p (open-input-string test-input))
-  (define (get-all l)
-    (let ([t (a-lexer p)])
-      (if (equal? t 'EOF)
-          (reverse (cons t l))
-          (get-all (cons t l)))))
-  (get-all empty))
-
-
-(define the-parser
+(define mtpc-parser
   (parser
    [start stmt]
    [end EOF]
@@ -51,8 +41,6 @@
           [(NUM) $1]
           [(ID) $1]]]))
 
-(define test-input2 "a := 23")
-
-(define (parse-it s)
+(define (parse-string s)
   (define p (open-input-string s))
-  (the-parser (λ () (the-lexer p))))
+  (mtpc-parser (λ () (mtpc-lexer p))))
