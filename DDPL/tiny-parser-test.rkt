@@ -2,7 +2,7 @@
 
 (require rackunit)
 (require parser-tools/lex)
-(require "parser.rkt")
+(require "tiny-parser.rkt")
 
 (define (get-tokens a-lexer a-string)
   (define input (open-input-string a-string))
@@ -18,12 +18,12 @@
   (get-all-tokens empty))
 
 (check-equal?
- (get-tokens ddpl-lexer "( ) if then else while do ; := + = not output read")
+ (get-tokens tiny-lexer "( ) if then else while do ; := + = not output read")
  '(LPAREN RPAREN IF THEN ELSE WHILE DO SEMI ASSIGN PLUS EQ NOT OUTPUT READ EOF)
  "Simple tokens are scanned.")
 
 (check-equal?
- (get-tokens ddpl-lexer "abcd 0 1 true false") 
+ (get-tokens tiny-lexer "abcd 0 1 true false") 
  '((ID abcd) (NUM 0) (NUM 1) (BOOL #t) (BOOL #f) EOF)
  "Complex tokens are scanned.")
 

@@ -4,13 +4,13 @@
 (require (prefix-in : parser-tools/lex-sre))
 (require parser-tools/yacc)
 
-(provide parse-string (protect-out ddpl-parser ddpl-lexer))
+(provide parse-string (protect-out tiny-parser tiny-lexer))
 
 ;; Instead of 1 0 true false we have NUM and BOOL
 (define-tokens data-tokens (NUM BOOL ID))
 (define-empty-tokens punct-tokens (EOF IF THEN ELSE WHILE DO LPAREN RPAREN SEMI PLUS ASSIGN EQ NOT OUTPUT READ IMP))
 
-(define ddpl-lexer
+(define tiny-lexer
   (lexer
    [(eof) (token-EOF)]
    ["(" (token-LPAREN)]
@@ -33,9 +33,9 @@
    [(:: alphabetic
         (:* (:or alphabetic numeric #\_)))
     (token-ID (string->symbol lexeme))]
-   [whitespace (ddpl-lexer input-port)]))
+   [whitespace (tiny-lexer input-port)]))
 
-(define ddpl-parser
+(define tiny-parser
   (parser
    [start cmd]
    [end EOF]
@@ -55,4 +55,4 @@
 
 (define (parse-string s)
   (define p (open-input-string s))
-  (ddpl-parser (λ () (ddpl-lexer p))))
+  (tiny-parser (λ () (tiny-lexer p))))
