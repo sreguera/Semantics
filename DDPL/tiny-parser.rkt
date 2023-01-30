@@ -37,21 +37,21 @@
 
 (define tiny-parser
   (parser
-   [start cmd]
+   [start com]
    [end EOF]
    [error void]
    [tokens data-tokens punct-tokens]
    [grammar
-    [cmd [(ID ASSIGN expr) (list 'ASSIGN $1 $3)]
-         [(OUTPUT expr) (list 'OUTPUT $2)]
-         [(IF expr THEN cmd ELSE cmd) (list 'IF $2 $4 $6)]
-         [(WHILE expr DO cmd) (list 'WHILE $2 $4)]
-         [(cmd SEMI cmd) (list 'SEQ $1 $3)]
-         [(LPAREN cmd RPAREN) $2]]
-    [expr [(LPAREN expr RPAREN) $2]
-          [(NUM) $1]
-          [(BOOL) $1]
-          [(ID) $1]]]))
+    [com [(ID ASSIGN exp) (list 'ASSIGN $1 $3)]
+         [(OUTPUT exp) (list 'OUTPUT $2)]
+         [(IF exp THEN com ELSE com) (list 'IF $2 $4 $6)]
+         [(WHILE exp DO com) (list 'WHILE $2 $4)]
+         [(com SEMI com) (list 'SEQ $1 $3)]
+         [(LPAREN com RPAREN) $2]]
+    [exp [(LPAREN exp RPAREN) $2]
+         [(NUM) $1]
+         [(BOOL) $1]
+         [(ID) $1]]]))
 
 (define (parse-string s)
   (define p (open-input-string s))
