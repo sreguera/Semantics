@@ -33,6 +33,21 @@
  "Parsing assignments")
 
 (check-equal?
- (parse-string "while true do a := 0; a := 1")
+ (parse-string "while true do (a := 0; a := 1)")
  '(WHILE #t (SEQ (ASSIGN a 0) (ASSIGN a 1)))
  "Parsing while")
+
+(check-equal?
+ (parse-string "while true do a := 0; a := 1")
+ '(SEQ (WHILE #t (ASSIGN a 0)) (ASSIGN a 1))
+ "Parsing while")
+
+(check-equal?
+ (parse-string "if true then a := 1 ; b := 2 else c := 3 ; d := 4")
+ '(SEQ (IF #t (SEQ (ASSIGN a 1) (ASSIGN b 2)) (ASSIGN c 3)) (ASSIGN d 4))
+ "Parsing if")
+
+(check-equal?
+ (parse-string "a := 1 = not 2 + 3 + 4")
+ '(ASSIGN a (EQ 1 (PLUS (PLUS (NOT 2) 3) 4)))
+ "Parsing ops")
