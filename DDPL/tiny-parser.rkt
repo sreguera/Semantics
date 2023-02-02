@@ -47,20 +47,21 @@
     [left PLUS]
     [left NOT]]
    [grammar
-    [com [(ID ASSIGN exp) (list 'ASSIGN $1 $3)]
-         [(OUTPUT exp) (list 'OUTPUT $2)]
-         [(IF exp THEN com ELSE com) (prec NOT) (list 'IF $2 $4 $6)]
-         [(WHILE exp DO com) (prec NOT) (list 'WHILE $2 $4)]
-         [(com SEMI com) (list 'SEQ $1 $3)]
+    [com [(ID ASSIGN exp) `(ASSIGN ,$1 ,$3)]
+         [(OUTPUT exp) `(OUTPUT ,$2)]
+         [(IF exp THEN com ELSE com) (prec NOT) `(IF ,$2 ,$4 ,$6)]
+         [(WHILE exp DO com) (prec NOT) `(WHILE ,$2 ,$4)]
+         [(com SEMI com) `(SEQ ,$1 ,$3)]
          [(LPAREN com RPAREN) $2]]
     [exp [(LPAREN exp RPAREN) $2]
          [(NUM) $1]
          [(BOOL) $1]
-         [(exp PLUS exp) (list 'PLUS $1 $3)]
-         [(exp EQ exp) (list 'EQ $1 $3)]
-         [(NOT exp) (list 'NOT $2)]
+         [(exp PLUS exp) `(PLUS ,$1 ,$3)]
+         [(exp EQ exp) `(EQ ,$1 ,$3)]
+         [(NOT exp) `(NOT ,$2)]
          [(ID) $1]]]))
 
 (define (parse-string s)
   (define p (open-input-string s))
   (tiny-parser (λ () (tiny-lexer p))))
+
