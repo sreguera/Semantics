@@ -4,8 +4,8 @@
 
 (struct state (memory input output) #:transparent)
 
-(define (make-state)
-  (state (hash) '() '()))
+(define (make-state [input '()])
+  (state (hash) input '()))
 
 (define (e-eval e s)
   (match e
@@ -16,6 +16,11 @@
        (match (hash-ref m x 'unbound)
          ['unbound 'error]
          [v (list v s)]))]
+    [`(READ)
+     (match-let ([(state m i o) s])
+       (if (null? i)
+         'error
+         (list (first i) (state m (rest i) o))))]
     [`(NOT ,e1)
      (match (e-eval e1 s)
        [(list v1 s1)

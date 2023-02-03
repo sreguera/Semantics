@@ -59,6 +59,7 @@
          [(exp PLUS exp) `(PLUS ,$1 ,$3)]
          [(exp EQ exp) `(EQ ,$1 ,$3)]
          [(NOT exp) `(NOT ,$2)]
+         [(READ) `(READ)]
          [(ID) $1]]]))
 
 (define (parse-string s)

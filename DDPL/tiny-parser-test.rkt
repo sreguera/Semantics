@@ -28,6 +28,11 @@
  "Complex tokens are scanned.")
 
 (check-equal?
+ (parse-string "x := read")
+ '(ASSIGN x (READ))
+ "Parsing read")
+
+(check-equal?
  (parse-string "a := 0; a := 1")
  '(SEQ (ASSIGN a 0) (ASSIGN a 1))
  "Parsing assignments")
